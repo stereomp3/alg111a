@@ -44,9 +44,8 @@ def f(c, x):
     """
     function(f(x))
     :param C: 填入判斷函數，它會回傳函數的值 (f(x))
-    :param x: 初始的位置，會慢慢的變動，直到f(x+dx)<f(x) && f(x-dx)<f(x)，就會跳出迴圈
-    :param dx: 用來爬山的位移，函數內定好了
-    :return: 答案列表
+    :param x: x列表
+    :return: y
     """
     sum = 0
     for i in range(len(c)):
