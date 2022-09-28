@@ -1,4 +1,6 @@
-https://gitlab.com/cccnqu111/alg/-/blob/master/A2-QA/integerProgramming/README.md
+題目來源: https://gitlab.com/cccnqu111/alg/-/blob/master/A2-QA/integerProgramming/README.md
+
+參考程式碼: https://gitlab.com/cccnqu111/alg/-/tree/master/10a-improve/hillClimbing2
 
 解
 
