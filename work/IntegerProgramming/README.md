@@ -2,8 +2,15 @@ https://gitlab.com/cccnqu111/alg/-/blob/master/A2-QA/integerProgramming/README.m
 
 解
 
+`max: 7*x1 + 8*x2 + 2*x3 + 9*x4 + 6*x5`
+
+限制條件
+
 ```
-4x1 + 7x2 + 3x3 + 8x4 + 5x5	≤ 211 
+5*x1 + 7*x2 + 9*x3	+ 2*x4 + 1*x5	≤	250
+18*x1 + 4x2 – 9*x3 + 10x4 + 12*x5 ≤ 285
+4*x1 + 7*x2 + 3*x3 + 8*x4 + 5*x5 ≤ 211
+5*x1 + 13*x2 + 16*x3 + 3x4 – 7*x5 ≤ 315
 ```
 
 
@@ -14,10 +21,24 @@ https://gitlab.com/cccnqu111/alg/-/blob/master/A2-QA/integerProgramming/README.m
 
 [BruteForce](BruteForce.py): 使用5個for迴圈解
 
+執行結果
+
+```sh
+[[7, 21, 0, 2, 4], 259]  # [x, max]
+time:0:00:02.267939  # 執行時間
+```
+
+最大值為259
+
 ```python
-coe = [4, 7, 3, 8, 5]  
-r = 211
-BFN = r//min(coe)  # 取最小的可能下去做for迴圈次數  
+from datetime import datetime
+
+coe = [7, 8, 2, 9, 6]
+
+restriction = [[5, 7, 9, 2, 1, 250],
+               [18, 4, -9, 10, 12, 285],
+               [4, 7, 3, 8, 5, 211],
+               [5, 13, 16, 3, -7, 315]]
 
 def f(c, x):
     """
@@ -38,25 +59,58 @@ def brute_force():
     主要破解函式，使用超級暴力，針對5個變數進行for迴圈
     :return: 答案列表
     """
-    for x1 in range(BFN):
-        for x2 in range(BFN):
-            for x3 in range(BFN):
-                for x4 in range(BFN):
-                    for x5 in range(BFN):
-                        if IsEnd(f(coe, [x1, x2, x3, x4, x5]), r):
-                            return [x1, x2, x3, x4, x5]
+    ans = 0
+    x = []
+    for x1 in range(70):
+        if restraint([x1], restriction) == -100:
+                            break
+        for x2 in range(70):
+            if restraint([x1, x2], restriction) == -100:
+                            break
+            for x3 in range(70):
+                if restraint([x1, x2, x3], restriction) == -100:
+                            break
+                for x4 in range(70):
+                    if restraint([x1, x2, x3, x4], restriction) == -100:
+                            break
+                    for x5 in range(70):
+                        if restraint([x1, x2, x3, x4, x5], restriction) == -100:
+                            break
+                        NewAns = f(coe, [x1, x2, x3, x4, x5])
+                        if ans < NewAns:
+                            ans = NewAns
+                            x = [x1, x2, x3, x4, x5]
+    return [x, ans]
 
-def IsEnd(sum, target):
-    """
-    判斷結果是不是等於最大值
-    :param sum: 主要函數返回值(f(x))
-    :param target: 目標值
-    :return: 找到最終結果，返回True
-    """
-    if sum == target:
-        return true
 
+def restraint(x, r):
+    """
+    限制函式，用來減f(x)，當x的規則不合的時候，就不讓他進入if條件
+    :param x: 變動的x
+    :param r: 函數的限制條件，使用二維陣列存取，前面是參數，後面是限制數
+    :return: 限制的逞罰，-100或是0(無逞罰)
+    """
+    sum = []
+    if not len(r): # 沒有限制條件
+        print("no restraction!")
+        return 0
+
+    for i in range(len(r)):
+        sum.append(0)
+        for j in range(len(r[i])-1):
+            if len(x) > j: # 如果x比參數少就跳過，防止出錯
+                if x[j] < 0:   # x為負數就逞罰
+                    return -100
+                sum[i] += r[i][j] * x[j]
+        if sum[i] > r[i][len(r[i])-1]:  # 判斷基本條件
+            return -100 
+    return 0      
+
+startTime = datetime.now()
 print(brute_force())  # 打印最後結果
+endTime = datetime.now()
+seconds = endTime - startTime
+print(f'time:{seconds}')
 ```
 
 
@@ -67,18 +121,25 @@ print(brute_force())  # 打印最後結果
 
 [hillClimbing01](hillClimbing01.py): 使用全部參數一同增長做處理，dx設定為1
 
-最後結果如下: 
+執行結果: 
 
 ```sh
-[8, 8, 8, 8, 7]
+[[8, 8, 8, 8, 7], 250]  # [x, max]
+time:0:00:00.000999   # 執行時間
 ```
 
-值等於 211
+最大值為250
 
 ```python
-coe = [4, 7, 3, 8, 5]  
+from datetime import datetime
+
+coe = [7, 8, 2, 9, 6]
 init_x = [0, 0, 0, 0, 0]
-r = 211
+
+restriction = [[5, 7, 9, 2, 1, 250],
+               [18, 4, -9, 10, 12, 285],
+               [4, 7, 3, 8, 5, 211],
+               [5, 13, 16, 3, -7, 315]]
 
 def hillClimbing(f, x, _dx=1):
     """
@@ -86,23 +147,22 @@ def hillClimbing(f, x, _dx=1):
     :param f: 填入判斷函數，它會回傳函數的值 (f(x))
     :param x: 初始的位置，會慢慢的變動，直到f(x+dx)<f(x) && f(x-dx)<f(x)，就會跳出迴圈
     :param dx: 用來爬山的位移，函數內定好了
-    :return: max answer，值固定
+    :return:
     """
     peak = False
     while (not peak):
         for i in range(len(x)):
-            tmpA = x.copy()  # 進行列表複製
+            tmpA = x.copy()
             tmpD = x.copy()
             tmpA[i] += _dx
             tmpD[i] -= _dx
-            if f(coe, tmpA)>f(coe, x) - restraint(coe, tmpA, r):
+            if f(coe, tmpA)>f(coe, x) - restraint(tmpA, restriction):
                 x = tmpA
-            elif f(coe, tmpD)>f(coe, x) - restraint(coe, tmpD, r):
+            elif f(coe, tmpD)>f(coe, x) - restraint(tmpD, restriction):
                 x = tmpD
             else:  # 最後對每個進行最後的運算
-                peak = True  # 到頂了，下面會跳出迴圈，給定最大值
-                break
-    return x
+                peak = True  # 到頂了，下面會跳出迴圈，給定最大值   
+    return [x, ManAns(coe, x)]
 
 def f(c, x):
     """
@@ -117,59 +177,95 @@ def f(c, x):
             sum += c[i] * x[i]
     return sum
 
-def restraint(c, x, r):
+def restraint(x, r):
     """
     限制函式，用來減f(x)，當x的規則不合的時候，就不讓他進入if條件
+    :param x: 變動的x
+    :param r: 函數的限制條件，使用二維陣列存取，前面是參數，後面是限制數
+    :return: 限制的逞罰，-100或是0(無逞罰)
+    """
+    sum = []
+    if not len(r): # 沒有限制條件
+        print("no restraction!")
+        return 0
+
+    for i in range(len(r)):
+        sum.append(0)
+        for j in range(len(r[i])-1):
+            if len(x) > j: # 如果x比參數少就跳過，防止出錯
+                if x[j] < 0:   # x為負數就逞罰
+                    return -100
+                sum[i] += r[i][j] * x[j] 
+        if sum[i] > r[i][len(r[i])-1]:  # 判斷基本條件
+            return -100 
+    return 0 
+    
+def ManAns(c, x):
+    """
+    用來算函數最大值
     :param c: 函數的參數
     :param x: 變動的x
-    :param r: 函數的最大值 f(x) <= 211 ; r = 211
-    :return: 限制的逞罰，-100或是0(無逞罰)
+    :return: 傳回函數的最大值
     """
     sum = 0
     for i in range(len(c)):
         if len(x) > i: # 如果x比參數少就跳過，防止出錯
             sum += c[i] * x[i]
-            if not 0 <= x[i] <= r/c[i]:  # 判斷基本條件 (整數、不大於限制條件)
-                return -100
-    if not sum <= 211:  # 判斷基本條件
-        return -100
-    else:
-         return 0
+    return sum
 
+startTime = datetime.now()
 print(hillClimbing(f, init_x))  # 打印最後結果
-
+endTime = datetime.now()
+seconds = endTime - startTime
+print(f'time:{seconds}')
 ```
 
 
 
-[hillClimbing02](hillClimbing02.py): 使用`random.randint(-_dx,_dx)`爬山，dx設定為1，對每一個x做加上random number的動作，如果找不到更大的值10000次，就代表目前的是最大值，答案是隨機的
+[hillClimbing02](hillClimbing02.py): 使用`random.randint(-_dx,_dx)`爬山，dx設定為10，對每一個x做加上random number的動作，如果找不到更大的值100000次，就代表目前的是最大值，答案是隨機的
+
+下面是一組較好的隨機執行結果
+
+```sh
+[[11, 8, 7, 11, 0], 254]   # [x, max]
+time:0:00:00.442703   # 執行時間
+```
+
+隨機最大值為: 254
 
 ```python
 import random
+from datetime import datetime
 
-coe = [4, 7, 3, 8, 5]  
+coe = [7, 8, 2, 9, 6]
 init_x = [0, 0, 0, 0, 0]
-r = 211
-fail_times = 10000
-def hillClimbing(f, x, _dx=1):
+
+restriction = [[5, 7, 9, 2, 1, 250],
+               [18, 4, -9, 10, 12, 285],
+               [4, 7, 3, 8, 5, 211],
+               [5, 13, 16, 3, 7, 315]]
+fail_times = 100000
+
+def hillClimbing(f, x, _dx=10):
     """
     主要爬山函式
     :param f: 填入判斷函數，它會回傳函數的值 (f(x))
     :param x: 初始的位置，會慢慢的變動，直到f(x+dx)<f(x) && f(x-dx)<f(x)，就會跳出迴圈
-    :param dx: 用來爬山的位移，使用random下去做位移
+    :param dx: 用來爬山的位移，函數內定好了
     :return:
     """
     fail_count = 0
     while (fail_count < fail_times):
         for i in range(len(x)):
-            tmp = x.copy()  # 進行拷貝，利用新列表進行新舊判斷
-            tmp[i] += random.randint(-_dx,_dx)  # 進行爬山位移
-            if f(coe, tmp)>f(coe, x) - restraint(coe, tmp, r):
+            tmp = x.copy()
+            tmp[i] += random.randint(-_dx,_dx)
+            if f(coe, tmp)>f(coe, x) - restraint(tmp, restriction):
                 x = tmp
                 fail_count = 0
-            else:  # 失敗
+            else:  # 最後對每個進行最後的運算
                 fail_count += 1
-    return x
+
+    return [x, ManAns(coe, x)]
 
 def f(c, x):
     """
@@ -184,26 +280,47 @@ def f(c, x):
             sum += c[i] * x[i]
     return sum
 
-def restraint(c, x, r):
+def restraint(x, r):
     """
     限制函式，用來減f(x)，當x的規則不合的時候，就不讓他進入if條件
+    :param x: 變動的x
+    :param r: 函數的限制條件，使用二維陣列存取，前面是參數，後面是限制數
+    :return: 限制的逞罰，-100或是0(無逞罰)
+    """
+    sum = []
+    if not len(r): # 沒有限制條件
+        print("no restraction!")
+        return 0
+
+    for i in range(len(r)):
+        sum.append(0)
+        for j in range(len(r[i])-1):
+            if len(x) > j: # 如果x比參數少就跳過，防止出錯
+                if x[j] < 0:   # x為負數就逞罰
+                    return -100
+                sum[i] += r[i][j] * x[j]
+        if sum[i] > r[i][len(r[i])-1]:  # 判斷基本條件
+            return -100 
+    return 0      
+
+def ManAns(c, x):
+    """
+    用來算函數最大值
     :param c: 函數的參數
     :param x: 變動的x
-    :param r: 函數的最大值 f(x) <= 211 ; r = 211
-    :return: 限制的逞罰，-100或是0(無逞罰)
+    :return: 傳回函數的最大值
     """
     sum = 0
     for i in range(len(c)):
         if len(x) > i: # 如果x比參數少就跳過，防止出錯
             sum += c[i] * x[i]
-            if not 0 <= x[i] <= r/c[i]:  # 判斷基本條件 (整數、不大於限制條件)
-                return -100
-    if not sum <= 211:  # 判斷基本條件
-        return -100
-    else:
-         return 0
+    return sum
 
+startTime = datetime.now()
 print(hillClimbing(f, init_x))  # 打印最後結果
+endTime = datetime.now()
+seconds = endTime - startTime
+print(f'time:{seconds}')
 ```
 
 
@@ -214,20 +331,27 @@ print(hillClimbing(f, init_x))  # 打印最後結果
 
 ## 貪婪法
 
-貪婪法: 係數最大的開始下手，使用一個列表紀錄權重，係數越大，權重越重，從權重大的開始往上加
+貪婪法: 係數最大的開始下手，使用一個列表紀錄權重，係數越大，權重越重，從權重大的開始往上加。但是效果好像不太好(因該是要把restriction的係數也考慮進去)
 
 最後結果如下: 
 
-```
-[0, 0, 1, 26, 0]
+```sh
+[[0, 0, 1, 26, 0], 236]  # [x, max]
+time:0:00:00.000999  # 執行時間
 ```
 
-值等於 211
+最大值等於 236
 
 ```python
-coe = [4, 7, 3, 8, 5]  
+from datetime import datetime
+
+coe = [7, 8, 2, 9, 6]
 init_x = [0, 0, 0, 0, 0]
-r = 211
+
+restriction = [[5, 7, 9, 2, 1, 250],
+               [18, 4, -9, 10, 12, 285],
+               [4, 7, 3, 8, 5, 211],
+               [5, 13, 16, 3, -7, 315]]
 
 def greedy(f, x, _dx=1):
     """
@@ -243,18 +367,18 @@ def greedy(f, x, _dx=1):
         tmp = x.copy()
         tmp[max_index] += _dx
         
-        if f(coe, tmp)>f(coe, x) - restraint(coe, tmp, r):
+        if f(coe, tmp)>f(coe, x) - restraint(tmp, restriction):
             x = tmp
         else:  
-            if not ResetMaxWeight(weight):  
+            if not ResetMaxWeight(weight):
                 break
-            max_index = findMaxWeightIndex(weight)  # 重新設定權重
+            max_index = findMaxWeightIndex(weight) 
                 
-    return x
+    return [x, ManAns(coe, x)]
 
 def f(c, x):
     """
-    主要函式
+    主要爬山函式
     :param c: 函數的參數
     :param x: 變動的x
     :return: y
@@ -265,24 +389,41 @@ def f(c, x):
             sum += c[i] * x[i]
     return sum
 
-def restraint(c, x, r):
+def restraint(x, r):
     """
     限制函式，用來減f(x)，當x的規則不合的時候，就不讓他進入if條件
+    :param x: 變動的x
+    :param r: 函數的限制條件，使用二維陣列存取，前面是參數，後面是限制數
+    :return: 限制的逞罰，-100或是0(無逞罰)
+    """
+    sum = []
+    if not len(r): # 沒有限制條件
+        print("no restraction!")
+        return 0
+
+    for i in range(len(r)):
+        sum.append(0)
+        for j in range(len(r[i])-1):
+            if len(x) > j: # 如果x比參數少就跳過，防止出錯
+                if x[j] < 0:   # x為負數就逞罰
+                    return -100
+                sum[i] += r[i][j] * x[j]
+        if sum[i] > r[i][len(r[i])-1]:  # 判斷基本條件
+            return -100 
+    return 0      
+
+def ManAns(c, x):
+    """
+    用來算函數最大值
     :param c: 函數的參數
     :param x: 變動的x
-    :param r: 函數的最大值 f(x) <= 211 ; r = 211
-    :return: 限制的逞罰，-100或是0(無逞罰)
+    :return: 傳回函數的最大值
     """
     sum = 0
     for i in range(len(c)):
         if len(x) > i: # 如果x比參數少就跳過，防止出錯
             sum += c[i] * x[i]
-            if not 0 <= x[i] <= r/c[i]:  # 判斷基本條件 (整數、不大於限制條件)
-                return -100
-    if not sum <= 211:  # 判斷基本條件
-        return -100
-    else:
-         return 0
+    return sum
 
 def setWeights(c):
     """
@@ -323,8 +464,12 @@ def ResetMaxWeight(w, num = -100):
         return True
     else:
         return False
-   
+    
+startTime = datetime.now()
 print(greedy(f, init_x))  # 打印最後結果    
+endTime = datetime.now()
+seconds = endTime - startTime
+print(f'time:{seconds}')
 ```
 
 
