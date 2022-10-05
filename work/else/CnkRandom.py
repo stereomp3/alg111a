@@ -1,3 +1,4 @@
+from ast import If
 import random
 
 from sqlalchemy import true
@@ -19,10 +20,8 @@ def RandomCnk(c, k):
         tmp = -1
         flag = False
         ans = CnK(c, k)
-        for i in table:
-            if i == ans:
-                flag = true
-                break
+        if ans in table:
+            flag = true
         for i in ans:
             if flag:
                 break
