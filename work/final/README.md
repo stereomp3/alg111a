@@ -394,3 +394,29 @@ e_grad = (forwardCircuitFast(a,b,c,x,y+h) - forwardCircuitFast(a,b,c,x,y)) / h
 
 
 
+
+
+
+
+A
+
+chain rule就是反傳遞的原因
+
+從後面傳回來，只要算一遍，像是下面這張圖
+
+![](D:\111semeter01\IntroductionToAlgorithms\alg111a\work\final\picture\BackWardFlow.png)
+
+梯度一開始會歸0
+
+下面的例子可以很好解釋為甚麼梯度是用加的
+
+
+$$
+\frac{\partial \sigma(x^2)}{\partial x} = 2x = x + x
+$$
+
+$$
+\frac{\partial \sigma(xy)}{\partial x} = y
+$$
+
+因為資料間有相關性，所以梯度要相加

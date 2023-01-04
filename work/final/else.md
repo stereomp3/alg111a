@@ -18,7 +18,7 @@ Also note that we are using `+=` to add onto the gradient in the `backward` func
 
 
 
-Q
+A
 
 chain rule就是反傳遞的原因
 
