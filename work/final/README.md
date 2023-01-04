@@ -1,6 +1,6 @@
 
 
-所有程式碼都是由: [GitHub - karpathy/micrograd: A tiny scalar-valued autograd engine and a neural net library on top of it with PyTorch-like API](https://github.com/karpathy/micrograd?fbclid=IwAR1D5t7GrLtFiaF10tJGAt5IPUOpb-cP9fju6d-fxcZJBeY5_dH42zMQkJE)，經過修改而產出(裡面寫JavaScript我改成python)，本文使用的圖片也是從這裡面獲得的，裡面有添加上個人中文心得註解，還有證明部分數學偏微分(sigmoid)
+所有程式碼都是由: http://karpathy.github.io/neuralnets/?fbclid=IwAR229GfWD95boQ8LweXhC7KY4jcQiYLGJ_25qdeG0NT1UGBD2nWpl3bPwjg，經過修改而產出(裡面寫JavaScript我改成python)，本文使用的圖片也是從這裡面獲得的，裡面有添加上個人中文心得註解，還有證明部分數學偏微分(sigmoid)
 
 
 
@@ -56,6 +56,8 @@ print(best_out)  # -5.95
 ## Numerical Gradient
 
 使用梯度法(梯度就是全部的偏微分加在一起，下面的公式就是對x做偏微分)，找到目前點的梯度，然後沿著梯度方向走，這個範例只有x和y，所以這個範例的梯度就是[x_derivative, y_derivative]
+
+
 $$
 \frac{\partial f(x,y)}{\partial x} = \frac{f(x+h,y) - f(x,y)}{h}
 $$
@@ -87,13 +89,21 @@ out_new = forwardMultiplyGate(x, y)  # -5.87059999999986
 ## Analytic Gradient
 
 上一個做法還是有點不太好，因為要調整每個獨立的輸入，對於今天有好幾百萬甚至上億節點的運算，會花費很多效能，所以我們把下面這個公式帶入到偏微分的公式中。
+
+
 $$
 f(x,y) = x y
 $$
+
+
 就可以得出下方公式的結論: x 的偏為分為 y
+
+
 $$
 \frac{\partial f(x,y)}{\partial x} = \frac{f(x+h,y) - f(x,y)}{h} = \frac{(x+h)y - xy}{h} = \frac{xy + hy - xy}{h} = \frac{hy}{h} = y
 $$
+
+
 
 這種方法可以讓x和y計算偏微分時，減少很多運算，提升程式效能
 
@@ -235,6 +245,7 @@ $$
 
 
 *sigmoid* function偏微分的過程
+
 
 
 $$
