@@ -238,7 +238,7 @@ $$
 
 
 $$
-\frac{\partial \sigma(x)}{\partial x} = \frac{\partial}{\partial x}\frac{1}{1 + e^{-x}} = \frac{\partial}{\partial x}(1 + e^{-x})^{-1} = (1 + e^{-x})^{-2}-e^{-x} = \frac{1}{1 + e^{-x}}\frac{e^{-x}}{1 + e^{-x}} = \sigma(x) (1 - \sigma(x))
+\frac{\partial \sigma(x)}{\partial x} = \frac{\partial}{\partial x}\frac{1}{1 + e^{-x}} = \frac{\partial}{\partial x}(1 + e^{-x})^{-1} = -(1 + e^{-x})^{-2}-e^{-x} = \frac{1}{1 + e^{-x}}\frac{e^{-x}}{1 + e^{-x}} = \frac{1}{1 + e^{-x}}(\frac{1 + e^{-x}}{1 + e^{-x}}+\frac{e^{-x}}{1 + e^{-x}}-\frac{1 + e^{-x}}{1 + e^{-x}}) = \sigma(x) (1 - \sigma(x))
 $$
 
 
