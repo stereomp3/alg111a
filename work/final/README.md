@@ -148,12 +148,17 @@ forwardCircuit(x, y, z)  # -12
 
 
 可以由[上面推導](#Analytic-Gradient)的，在`f(q,z) = q*z`的情況下，就會有下方的公式出現
+
+
 $$
 f(q,z) = q z \hspace{0.5in} \implies \hspace{0.5in} \frac{\partial f(q,z)}{\partial q} = z, \hspace{1in} \frac{\partial f(q,z)}{\partial z} = q
 $$
 
 
+
 我們也可以使用重複的做法，最後會得到在`f(x,y) = x+y`的情況下，偏微分會為1
+
+
 $$
 \frac{\partial f(x,y)}{\partial x} = \frac{f(x+h,y) - f(x,y)}{h} = \frac{(x+h+y) - (x+y)}{h} =  \frac{h}{h} = 1
 $$
@@ -212,27 +217,40 @@ z_derivative = (forwardCircuit(x,y,z+h) - forwardCircuit(x,y,z)) / h; # 3
 # Single Neuron
 
 接下來是單一神經元的運算，這裡面的數學就複雜的多，我們一樣要使用前面的Backpropagation概念，寫出程式碼，包含forward與backward，我認為forward主要代表填入運算式，然後backward就是根據目前運算的性質，寫出Analytic Gradient的公式，達到減少運算量的功效
+
+
 $$
 f(x,y,a,b,c) = \sigma(ax + by + c)
 $$
 
 
+
  σ(x) is the *sigmoid* function
+
+
 $$
 \sigma(x) = \frac{1}{1 + e^{-x}}
 $$
 
 
+
 *sigmoid* function偏微分的過程
+
+
 $$
 \frac{\partial \sigma(x)}{\partial x} = \frac{\partial}{\partial x}\frac{1}{1 + e^{-x}} = \frac{\partial}{\partial x}(1 + e^{-x})^{-1} = (1 + e^{-x})^{-2}-e^{-x} = \frac{1}{1 + e^{-x}}\frac{e^{-x}}{1 + e^{-x}} = \sigma(x) (1 - \sigma(x))
 $$
 
 
+
 最後就會得到下面的結果
+
+
 $$
 \frac{\partial \sigma(x)}{\partial x} = \sigma(x) (1 - \sigma(x))
 $$
+
+
 下面的程式碼先定義了 +、*、sigmoid的運算類別和運算的unit
 
 ```python
