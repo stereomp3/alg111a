@@ -1,6 +1,6 @@
 
 
-所有程式碼都是由: [GitHub - karpathy/micrograd: A tiny scalar-valued autograd engine and a neural net library on top of it with PyTorch-like API](https://github.com/karpathy/micrograd?fbclid=IwAR1D5t7GrLtFiaF10tJGAt5IPUOpb-cP9fju6d-fxcZJBeY5_dH42zMQkJE)，經過修改而產出(裡面寫JavaScript我改成python)，本文使用的圖片也是從這裡面獲得的
+所有程式碼都是由: [GitHub - karpathy/micrograd: A tiny scalar-valued autograd engine and a neural net library on top of it with PyTorch-like API](https://github.com/karpathy/micrograd?fbclid=IwAR1D5t7GrLtFiaF10tJGAt5IPUOpb-cP9fju6d-fxcZJBeY5_dH42zMQkJE)，經過修改而產出(裡面寫JavaScript我改成python)，本文使用的圖片也是從這裡面獲得的，裡面有添加上個人中文心得註解，還有證明部分數學偏微分(sigmoid)
 
 
 
